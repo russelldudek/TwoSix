@@ -1,0 +1,1 @@
+Publish the complete verified campaign from the corrected main branch workflow.
