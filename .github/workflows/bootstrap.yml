@@ -31,11 +31,8 @@ jobs:
         run: |
           set -euo pipefail
           cat bootstrap/source.part* | base64 --decode > /tmp/two-six-source.tar.gz
+          tar -tzf /tmp/two-six-source.tar.gz | head -40
           tar -xzf /tmp/two-six-source.tar.gz -C .
-          mkdir -p assets/brand
-          curl --fail --location --retry 3 \
-            "https://twosixtech.com/wp-content/themes/twosixtech25/assets/sentr-home/Two-Six-Tech-Footer-Logo%402x.png" \
-            --output assets/brand/two-six-logo-white.png
           test -s assets/brand/two-six-logo-white.png
           rm -rf bootstrap
           rm -f .github/workflows/bootstrap.yml
