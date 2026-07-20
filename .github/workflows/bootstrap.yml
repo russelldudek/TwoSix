@@ -1,31 +1,35 @@
-name: Publish candidate vision source
+name: Publish complete Two Six candidate vision
 
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
       - "bootstrap/**"
-      - ".github/workflows/bootstrap.yml"
-  workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
-  group: candidate-source-bootstrap
-  cancel-in-progress: true
+  group: two-six-publication
+  cancel-in-progress: false
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Check out main
+      - name: Check out canonical main
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
-      - name: Expand candidate vision source
+      - name: Expand verified candidate campaign
         shell: bash
         run: |
           set -euo pipefail
@@ -38,8 +42,16 @@ jobs:
           test -s assets/brand/two-six-logo-white.png
           rm -rf bootstrap
           rm -f .github/workflows/bootstrap.yml
+          rm -f .github/workflows/documents.yml
+          rm -f scripts/verify-pdfs.py
+          if grep -RilE 'role[[:space:]_-]*forge' . \
+            --exclude-dir=.git \
+            --exclude='*.pdf'; then
+            echo "Candidate-facing confidentiality scan failed." >&2
+            exit 1
+          fi
 
-      - name: Commit complete candidate vision
+      - name: Commit complete campaign to main
         shell: bash
         run: |
           set -euo pipefail
@@ -48,3 +60,15 @@ jobs:
           git add -A
           git commit -m "Publish Two Six candidate vision"
           git push origin main
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload exact published tree
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
