@@ -26,14 +26,34 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Expand candidate campaign
+      - name: Decode candidate archive
         shell: bash
         run: |
           set -euo pipefail
           cat bootstrap/source.part* | base64 --decode > /tmp/two-six-source.tar.gz
+          test -s /tmp/two-six-source.tar.gz
+
+      - name: Validate candidate archive
+        shell: bash
+        run: |
+          set -euo pipefail
           tar -tzf /tmp/two-six-source.tar.gz > /tmp/two-six-manifest.txt
           test -s /tmp/two-six-manifest.txt
+
+      - name: Extract candidate archive
+        shell: bash
+        run: |
+          set -euo pipefail
           tar -xzf /tmp/two-six-source.tar.gz -C .
+          test -s index.html
+          test -s styles.css
+          test -s resume.html
+          test -s cover-letter.html
+
+      - name: Remove publication staging
+        shell: bash
+        run: |
+          set -euo pipefail
           rm -rf bootstrap
           rm -f .github/workflows/bootstrap.yml
           rm -f .github/workflows/documents.yml
