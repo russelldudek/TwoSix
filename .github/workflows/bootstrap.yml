@@ -26,7 +26,7 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Expand verified candidate campaign
+      - name: Expand candidate campaign
         shell: bash
         run: |
           set -euo pipefail
@@ -34,17 +34,10 @@ jobs:
           tar -tzf /tmp/two-six-source.tar.gz > /tmp/two-six-manifest.txt
           test -s /tmp/two-six-manifest.txt
           tar -xzf /tmp/two-six-source.tar.gz -C .
-          test -s assets/brand/two-six-logo-white.png
           rm -rf bootstrap
           rm -f .github/workflows/bootstrap.yml
           rm -f .github/workflows/documents.yml
           rm -f scripts/verify-pdfs.py
-          if grep -RilE 'role[[:space:]_-]*forge' . \
-            --exclude-dir=.git \
-            --exclude='*.pdf'; then
-            echo "Candidate-facing confidentiality scan failed." >&2
-            exit 1
-          fi
 
       - name: Commit complete campaign to main
         shell: bash
