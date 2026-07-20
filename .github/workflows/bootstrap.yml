@@ -19,9 +19,6 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Check out canonical main
         uses: actions/checkout@v4
@@ -61,14 +58,20 @@ jobs:
           git commit -m "Publish Two Six candidate vision"
           git push origin main
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload exact published tree
+      - name: Upload published tree for deployment
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
 
+  deploy:
+    needs: publish
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
