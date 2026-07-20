@@ -31,7 +31,8 @@ jobs:
         run: |
           set -euo pipefail
           cat bootstrap/source.part* | base64 --decode > /tmp/two-six-source.tar.gz
-          tar -tzf /tmp/two-six-source.tar.gz | head -40
+          tar -tzf /tmp/two-six-source.tar.gz > /tmp/two-six-manifest.txt
+          test -s /tmp/two-six-manifest.txt
           tar -xzf /tmp/two-six-source.tar.gz -C .
           test -s assets/brand/two-six-logo-white.png
           rm -rf bootstrap
