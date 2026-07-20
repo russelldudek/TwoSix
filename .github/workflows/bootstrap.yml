@@ -1,0 +1,50 @@
+name: Publish candidate vision source
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "bootstrap/**"
+      - ".github/workflows/bootstrap.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: candidate-source-bootstrap
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Expand candidate vision source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat bootstrap/source.part* | base64 --decode > /tmp/two-six-source.tar.gz
+          tar -xzf /tmp/two-six-source.tar.gz -C .
+          mkdir -p assets/brand
+          curl --fail --location --retry 3 \
+            "https://twosixtech.com/wp-content/themes/twosixtech25/assets/sentr-home/Two-Six-Tech-Footer-Logo%402x.png" \
+            --output assets/brand/two-six-logo-white.png
+          test -s assets/brand/two-six-logo-white.png
+          rm -rf bootstrap
+          rm -f .github/workflows/bootstrap.yml
+
+      - name: Commit complete candidate vision
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Publish Two Six candidate vision"
+          git push origin main
