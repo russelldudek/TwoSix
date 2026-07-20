@@ -1,0 +1,1 @@
+Run the discrete decode, validate, extract, cleanup, commit, and deploy publication sequence.
