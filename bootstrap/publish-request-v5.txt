@@ -1,0 +1,1 @@
+Execute the archive publication, then audit the committed and live campaign.
