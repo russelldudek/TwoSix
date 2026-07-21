@@ -37,5 +37,6 @@
 - `qa/correction-regression.mjs`
 - `qa/browser-audit.mjs`
 - `qa/pdf-audit.mjs`
+- `qa/live-audit.mjs`
 - `.github/workflows/quality.yml`
 - `.github/workflows/deploy-pages.yml`
