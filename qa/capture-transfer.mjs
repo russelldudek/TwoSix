@@ -17,6 +17,7 @@ const targets = [
 for (const target of targets) {
   const page = await browser.newPage({ viewport: target.viewport });
   await page.goto(pathToFileURL(path.join(root, 'index.html')).href, { waitUntil: 'load' });
+  await page.addStyleTag({ content: '.site-header { display: none !important; }' });
   const transfer = page.locator('.transfer-section');
   assert.equal(await transfer.count(), 1, `${target.name} transfer section must exist`);
   const destination = path.join(output, `transfer-${target.name}.png`);
