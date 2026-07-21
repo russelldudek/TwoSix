@@ -12,7 +12,7 @@ const jobs = [
   ['Russell-Dudek-Two-Six-Technologies-Resume.pdf', 2],
   ['Russell-Dudek-Two-Six-Technologies-Cover-Letter.pdf', 1],
   ['Russell-Dudek-Two-Six-Interview-Thesis-Brief.pdf', 4],
-  ['Russell-Dudek-Two-Six-120-Day-Entry-Plan.pdf', 3],
+  ['Russell-Dudek-Two-Six-120-Day-Entry-Plan.pdf', 5],
   ['Russell-Dudek-Two-Six-Mission-Window-Review.pdf', 2],
   ['Russell-Dudek-Two-Six-Candidate-Campaign.pdf', null]
 ];
@@ -34,6 +34,12 @@ for (const [filename, expectedPages] of jobs) {
   assert.match(text, new RegExp(campaignUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'), `${filename} must print the complete candidate-vision URL`);
   assert.doesNotMatch(text, new RegExp(internalName, 'i'), `${filename} must not expose internal process attribution`);
   assert.doesNotMatch(text, new RegExp(`\\b${retiredTerm}\\b`, 'i'), `${filename} must use current actual-work terminology`);
+
+  if (filename.includes('120-Day-Entry-Plan')) {
+    for (const phrase of ['Days 1-30', 'Days 31-60', 'Days 61-90', 'Days 91-120', 'Next-quarter decisions']) {
+      assert.match(text, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'), `${filename} must include ${phrase}`);
+    }
+  }
 
   const metadata = await document.getMetadata().catch(() => ({ info: {}, metadata: null }));
   const metadataText = JSON.stringify(metadata.info ?? {});
