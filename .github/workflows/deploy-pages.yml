@@ -31,7 +31,7 @@ jobs:
         run: node qa/correction-regression.mjs
       - name: Install audit and document dependencies
         run: |
-          npm install --no-save playwright@1.55.0 pdfjs-dist@4.10.38
+          npm install --no-save playwright@1.55.0 pdfjs-dist@4.10.38 pdf-lib@1.17.1
           npx playwright install --with-deps chromium
       - name: Run rendered browser audit
         run: node qa/browser-audit.mjs
