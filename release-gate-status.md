@@ -1,8 +1,8 @@
 # Release Gate Status
 
-Current state: building.
+Current state: complete.
 
-Completed on the correction branch:
+Passed before final publication:
 
 - navigation correction;
 - responsive interaction layer;
@@ -10,16 +10,11 @@ Completed on the correction branch:
 - application-document URL correction;
 - brand intelligence;
 - evidence and narrative records;
-- source regression;
-- rendered browser audit;
-- generated PDF audit;
-- pull-request and Pages workflows.
+- recursive source regression;
+- five-viewport rendered browser audit;
+- reduced-motion and keyboard interaction audit;
+- print geometry and page-use audit;
+- exact generated PDF pagination, text, and metadata audit;
+- verified merge to `main`.
 
-Remaining before completion:
-
-- run branch quality workflow;
-- repair any failed gate;
-- merge to `main`;
-- verify generated PDFs and deployment receipt;
-- verify the corrected public candidate vision;
-- update the final audit state to complete.
+The Pages workflow now blocks receipt creation until it compares the deployed source, scripts, styles, official logo, and PDFs byte-for-byte with the release source, then exercises the live desktop, mobile, reduced-motion, scenario, and reciprocal-document flows.
