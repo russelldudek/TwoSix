@@ -81,3 +81,17 @@ jobs:
       - name: Stop on generated PDF failure
         if: steps.pdf-audit.outcome == 'failure'
         run: exit 1
+      - name: Verify corrected public deployment
+        id: final-live-audit
+        continue-on-error: true
+        run: |
+          node qa/live-audit.mjs "https://russelldudek.github.io/TwoSix/" "815ad2c7f18001118d631d7e79f88001acfa85dc" 2>&1 | tee final-live-audit.log
+      - name: Upload corrected live diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corrected-live-audit
+          path: final-live-audit.log
+      - name: Stop on corrected live failure
+        if: steps.final-live-audit.outcome == 'failure'
+        run: exit 1
