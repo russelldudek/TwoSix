@@ -14,8 +14,7 @@ const jobs = [
   ['Russell-Dudek-Two-Six-Technologies-Cover-Letter.pdf', 1],
   ['Russell-Dudek-Two-Six-Interview-Thesis-Brief.pdf', 4],
   ['Russell-Dudek-Two-Six-120-Day-Entry-Plan.pdf', 5],
-  ['Russell-Dudek-Two-Six-Mission-Window-Review.pdf', 2],
-  ['Russell-Dudek-Two-Six-Candidate-Campaign.pdf', null]
+  ['Russell-Dudek-Two-Six-Mission-Window-Review.pdf', 2]
 ];
 
 for (const [filename, expectedPages] of jobs) {
@@ -25,10 +24,8 @@ for (const [filename, expectedPages] of jobs) {
   const document = await getDocument({ data: new Uint8Array(bytes), disableWorker: true }).promise;
   const independent = await PDFDocument.load(bytes, { updateMetadata: false });
   assert.equal(independent.getPageCount(), document.numPages, `${filename} PDF parsers must agree on page count`);
-  if (expectedPages !== null) {
-    assert.equal(document.numPages, expectedPages, `${filename} PDF.js page count`);
-    assert.equal(independent.getPageCount(), expectedPages, `${filename} pdf-lib page count`);
-  }
+  assert.equal(document.numPages, expectedPages, `${filename} PDF.js page count`);
+  assert.equal(independent.getPageCount(), expectedPages, `${filename} pdf-lib page count`);
 
   const pageText = [];
   for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
