@@ -31,17 +31,17 @@
 - [x] Interview brief verified at exactly four pages
 - [x] Mission Window Review verified at exactly two pages
 - [x] Entry-plan source contains one cover and four substantive phase sheets
-- [ ] Generated entry plan verified at exactly five pages
-- [ ] All four entry-plan content pages pass full-page rendered review
-- [ ] All four entry-plan content pages pass footer-clearance and page-use geometry
+- [x] Generated entry plan verified at exactly five pages on the correction branch
+- [x] All four entry-plan content pages passed full-page rendered browser geometry
+- [x] All four entry-plan content pages passed footer-clearance and page-use thresholds
 
 ## Publication
 
 - [x] Pull-request quality workflow configured
 - [x] Pages release workflow configured
-- [ ] Five-page correction branch quality run passed
+- [x] Five-page correction branch quality run `29837523440` passed
 - [ ] Five-page source merged to `main`
-- [ ] Five-page PDF regenerated and committed
+- [ ] Five-page PDF regenerated and committed on `main`
 - [ ] Exact deployed HTML, stylesheet, and PDF verified
 - [ ] Live entry-plan route and download verified
 - [ ] Final campaign audit restored to complete
