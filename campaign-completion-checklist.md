@@ -23,7 +23,7 @@
 - [x] 390-pixel and 320-pixel artifact compositions
 - [x] Transfer section contains four evidence-to-contribution lanes
 - [x] Transfer section uses deliberate desktop and handheld compositions
-- [ ] Transfer pane full-page visual review passed for the corrected source
+- [x] Transfer pane visual review passed for the corrected desktop and mobile source
 
 ## Documents
 
@@ -45,9 +45,9 @@
 
 - [x] Pull-request quality workflow configured
 - [x] Pages release workflow configured
-- [ ] Corrected source and rendered-browser audit passed
-- [ ] Corrected five-document PDF audit passed
-- [ ] Corrected transfer screenshots inspected
+- [x] Corrected source and rendered-browser audit passed in run `29848117604`
+- [x] Corrected five-document PDF audit passed in run `29848117604`
+- [x] Corrected desktop and mobile transfer screenshots inspected
 - [ ] Corrected source merged to `main`
 - [ ] Exact live audit confirms simplified header and transfer composition
 - [ ] Exact live audit confirms aggregate PDF returns 404
@@ -55,4 +55,4 @@
 
 ## Completion condition
 
-This checklist represents the current correction state. The campaign is complete only when `deployment-status.json` identifies the corrected publication source and records `live_audit: passed`. A missing, stale, or failed receipt leaves the campaign in building state.
+This checklist represents verified source readiness. The campaign is complete only when `deployment-status.json` identifies the corrected publication source and records `live_audit: passed`. A missing, stale, or failed receipt leaves the campaign in release-candidate state.
