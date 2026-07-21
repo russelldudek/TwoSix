@@ -45,22 +45,22 @@ jobs:
         with:
           name: browser-audit
           path: browser-audit.log
+      - name: Stop on rendered browser failure
+        if: steps.browser-audit.outcome == 'failure'
+        run: exit 1
+      - name: Capture transfer pane visual review
+        run: node qa/capture-transfer.mjs
       - name: Verify transfer pane screenshots
-        if: steps.browser-audit.outcome == 'success'
         run: |
           test -s qa-artifacts/transfer-desktop.png
           test -s qa-artifacts/transfer-mobile.png
           ls -lh qa-artifacts
       - name: Upload transfer pane visual review
-        if: steps.browser-audit.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: transfer-pane-review
-          path: ${{ github.workspace }}/qa-artifacts
+          path: qa-artifacts
           if-no-files-found: error
-      - name: Stop on rendered browser failure
-        if: steps.browser-audit.outcome == 'failure'
-        run: exit 1
       - name: Generate printable PDFs
         run: node scripts/build-pdfs.mjs
       - name: Upload entry plan for visual review
