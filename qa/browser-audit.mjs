@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
 
 const root = process.cwd();
+const artifactDir = path.join(root, 'qa-artifacts');
+await mkdir(artifactDir, { recursive: true });
+
 const mime = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -76,6 +79,7 @@ async function auditRoute(route, viewport) {
     const headerResume = page.locator('.site-header a[href="resume.html"]');
     assert.equal(await headerResume.count(), 1, `Header must contain one Resume destination at ${viewport.name}`);
     assert.equal((await headerResume.first().innerText()).trim(), 'Resume', `Header action must read Resume at ${viewport.name}`);
+    assert.equal(await page.locator('.site-header a[href="cover-letter.html"]').count(), 0, `Cover letter must not appear in primary navigation at ${viewport.name}`);
 
     if (viewport.width <= 980) {
       const toggle = page.locator('.nav-toggle');
@@ -83,8 +87,44 @@ async function auditRoute(route, viewport) {
       await toggle.click();
       assert.equal(await toggle.getAttribute('aria-expanded'), 'true', `Mobile navigation must report open at ${viewport.name}`);
       assert.ok(await headerResume.first().isVisible(), `Resume must be visible inside open mobile navigation at ${viewport.name}`);
+      assert.equal(await page.locator('.site-header a[href="cover-letter.html"]').count(), 0, `Mobile navigation must not restore Cover letter at ${viewport.name}`);
       await page.keyboard.press('Escape');
       assert.equal(await toggle.getAttribute('aria-expanded'), 'false', `Escape must close mobile navigation at ${viewport.name}`);
+    }
+
+    const transfer = page.locator('.transfer-section');
+    assert.equal(await transfer.count(), 1, `Transfer section must exist at ${viewport.name}`);
+    assert.equal(await page.locator('.transfer-lane').count(), 4, `Transfer section must expose four operating lanes at ${viewport.name}`);
+    assert.equal(await page.locator('.transfer-value span').allInnerTexts().then((items) => items.filter((item) => item.trim() === 'Day-one contribution').length), 4, `Each transfer lane must expose a day-one contribution at ${viewport.name}`);
+    assert.equal(await page.locator('a[href="docs/Russell-Dudek-Two-Six-Candidate-Campaign.pdf"]').count(), 0, `Aggregate campaign PDF action must be absent at ${viewport.name}`);
+
+    const transferStyles = await page.evaluate(() => [...document.styleSheets].map((sheet) => sheet.href ?? '').filter(Boolean));
+    assert.ok(transferStyles.some((href) => href.includes('transfer-2026.css')), `Transfer composition stylesheet must load at ${viewport.name}`);
+
+    const transferGeometry = await page.evaluate(() => {
+      const intro = document.querySelector('.transfer-intro').getBoundingClientRect();
+      const lanes = document.querySelector('.transfer-lanes').getBoundingClientRect();
+      const rows = [...document.querySelectorAll('.transfer-lane')].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return { left: rect.left, right: rect.right, width: rect.width, height: rect.height };
+      });
+      return {
+        intro: { left: intro.left, right: intro.right, top: intro.top, bottom: intro.bottom },
+        lanes: { left: lanes.left, right: lanes.right, top: lanes.top, bottom: lanes.bottom },
+        rows
+      };
+    });
+    assert.ok(transferGeometry.rows.every((row) => row.width >= Math.min(280, viewport.width - 48)), `Transfer lanes must remain readable at ${viewport.name}`);
+    assert.ok(transferGeometry.rows.every((row) => row.height >= 88), `Transfer lanes must retain deliberate vertical rhythm at ${viewport.name}`);
+    if (viewport.width > 980) {
+      assert.ok(transferGeometry.intro.right < transferGeometry.lanes.left, `Transfer intro and lanes must form distinct desktop columns at ${viewport.name}`);
+      assert.ok(Math.abs(transferGeometry.intro.top - transferGeometry.lanes.top) <= 4, `Transfer columns must align at the top at ${viewport.name}`);
+    } else {
+      assert.ok(transferGeometry.intro.bottom < transferGeometry.lanes.top, `Transfer lanes must follow the introduction at ${viewport.name}`);
+    }
+
+    if (viewport.name === 'desktop' || viewport.name === 'mobile') {
+      await transfer.screenshot({ path: path.join(artifactDir, `transfer-${viewport.name}.png`) });
     }
 
     const helix = page.locator('[data-scenario="helix"]');
