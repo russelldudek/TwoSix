@@ -1,1 +1,0 @@
-Activate the complete candidate vision publication workflow through a reviewed merge.

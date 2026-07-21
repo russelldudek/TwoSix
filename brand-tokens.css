@@ -1,0 +1,17 @@
+:root {
+  /* Official/source-sampled recognition layer */
+  --tst-black: #050505;
+  --tst-white: #ffffff;
+  --tst-paper: #f4f6f6;
+  --tst-ink: #111414;
+  --tst-muted: #636b6d;
+  --tst-rule: #c8d0d1;
+  /* Candidate-original Mission Window accents */
+  --signal-lime: #b9ff35;
+  --signal-cyan: #64e6ff;
+  --signal-amber: #ffc857;
+  --signal-red: #ff6b6b;
+  --deep-panel: #101515;
+  --deep-panel-2: #172020;
+  --shadow: 0 18px 55px rgba(0,0,0,.19);
+}
