@@ -25,12 +25,17 @@ const scenarios = {
   }
 };
 
+let animationTimer = null;
+
 function applyScenario(key, animate = true) {
   const data = scenarios[key];
   if (!data) return;
 
-  document.querySelectorAll('[data-scenario]').forEach((button) => {
-    button.setAttribute('aria-selected', String(button.dataset.scenario === key));
+  const buttons = [...document.querySelectorAll('[data-scenario]')];
+  buttons.forEach((button) => {
+    const selected = button.dataset.scenario === key;
+    button.setAttribute('aria-selected', String(selected));
+    button.tabIndex = selected ? 0 : -1;
   });
 
   document.querySelectorAll('.gate').forEach((gate, index) => {
@@ -43,17 +48,84 @@ function applyScenario(key, animate = true) {
   document.querySelector('#decision-badge').textContent = data.status;
 
   const board = document.querySelector('.sync-board');
+  clearTimeout(animationTimer);
+  board.classList.remove('is-running');
+
   if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    board.classList.remove('is-running');
-    void board.offsetWidth;
-    board.classList.add('is-running');
-    window.setTimeout(() => board.classList.remove('is-running'), 1200);
+    requestAnimationFrame(() => {
+      board.classList.add('is-running');
+      animationTimer = window.setTimeout(() => {
+        board.classList.remove('is-running');
+        animationTimer = null;
+      }, 1200);
+    });
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-scenario]').forEach((button) => {
+function initializeScenarioTabs() {
+  const buttons = [...document.querySelectorAll('[data-scenario]')];
+  if (!buttons.length) return;
+
+  buttons.forEach((button, index) => {
     button.addEventListener('click', () => applyScenario(button.dataset.scenario));
+    button.addEventListener('keydown', (event) => {
+      const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
+      if (!keys.includes(event.key)) return;
+      event.preventDefault();
+
+      let nextIndex = index;
+      if (event.key === 'ArrowRight') nextIndex = (index + 1) % buttons.length;
+      if (event.key === 'ArrowLeft') nextIndex = (index - 1 + buttons.length) % buttons.length;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = buttons.length - 1;
+
+      buttons[nextIndex].focus();
+      applyScenario(buttons[nextIndex].dataset.scenario);
+    });
   });
+
   applyScenario('helix', false);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    requestAnimationFrame(() => applyScenario('helix', true));
+  }
+}
+
+function initializeNavigation() {
+  const nav = document.querySelector('.nav');
+  const toggle = document.querySelector('.nav-toggle');
+  const links = document.querySelector('#primary-links');
+  if (!nav || !toggle || !links) return;
+
+  const setMenu = (open) => {
+    nav.dataset.menuOpen = String(open);
+    toggle.setAttribute('aria-expanded', String(open));
+  };
+
+  toggle.addEventListener('click', () => {
+    setMenu(nav.dataset.menuOpen !== 'true');
+  });
+
+  links.addEventListener('click', (event) => {
+    if (event.target.closest('a')) setMenu(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && nav.dataset.menuOpen === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (nav.dataset.menuOpen === 'true' && !nav.contains(event.target)) setMenu(false);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 980) setMenu(false);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initializeNavigation();
+  initializeScenarioTabs();
 });

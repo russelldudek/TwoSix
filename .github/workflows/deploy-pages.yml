@@ -1,0 +1,76 @@
+name: Deploy Two Six candidate vision
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run source regression audit
+        run: node qa/correction-regression.mjs
+      - name: Install audit and document dependencies
+        run: |
+          npm install --no-save playwright@1.55.0 pdfjs-dist@4.10.38
+          npx playwright install --with-deps chromium
+      - name: Run rendered browser audit
+        run: node qa/browser-audit.mjs
+      - name: Generate printable PDFs
+        run: node scripts/build-pdfs.mjs
+      - name: Run generated PDF audit
+        run: node qa/pdf-audit.mjs
+      - name: Assemble static release
+        run: |
+          mkdir -p _site
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='scripts' \
+            --exclude='_site' \
+            --exclude='node_modules' \
+            --exclude='package.json' \
+            --exclude='package-lock.json' \
+            ./ _site/
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Persist generated documents and deployment receipt
+        if: success()
+        run: |
+          printf '{"source_commit":"%s","page_url":"%s","deployed_at":"%s"}\n' \
+            "$GITHUB_SHA" \
+            "${{ steps.deployment.outputs.page_url }}" \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > deployment-status.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs deployment-status.json
+          git commit -m "Persist generated campaign PDFs and deployment receipt [skip ci]"
+          git push origin HEAD:main
