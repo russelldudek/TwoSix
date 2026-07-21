@@ -10,6 +10,7 @@ const index = read('index.html');
 const app = read('app.js');
 const siteCss = read('site-2026.css');
 const entryPlan = read('120-day-plan.html');
+const resume = read('resume.html');
 const buildPdfs = read('scripts/build-pdfs.mjs');
 const pdfAudit = read('qa/pdf-audit.mjs');
 const liveAudit = read('qa/live-audit.mjs');
@@ -31,6 +32,8 @@ assert.equal((index.match(/class="transfer-lane"/g) ?? []).length, 4, 'Transfer 
 assert.match(index, /Lead at the altitude the decision requires\./, 'Transfer section must use the approved concise thesis');
 assert.match(index, /Portfolio strategy[\s\S]*Mission work/, 'Transfer section must show the complete operating range');
 assert.equal((index.match(/Day-one contribution/g) ?? []).length, 4, 'Each operating lane must connect evidence to a day-one contribution');
+
+assert.doesNotMatch(resume, /Food Safety Management Certification/i, 'Removed Food Safety Management Certification must not return to the resume');
 
 for (const content of [index, buildPdfs, pdfAudit, liveAudit, manifest]) {
   assert.doesNotMatch(content, new RegExp(aggregatePdfName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), 'Aggregate campaign PDF must be removed from public and release surfaces');

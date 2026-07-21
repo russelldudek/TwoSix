@@ -31,7 +31,10 @@
 - [x] Native PDF download controls
 - [x] Complete live candidate-vision URL in every document
 - [x] Cover-letter explanation of the linked work
-- [x] Resume verified at exactly two pages
+- [x] Food Safety Management Certification removed from resume source
+- [x] Source regression prevents the removed credential from returning
+- [x] PDF text audit prevents the removed credential from returning
+- [x] Corrected resume verified at exactly two pages in run `29854417415`
 - [x] Cover letter verified at exactly one page
 - [x] Interview brief verified at exactly four pages
 - [x] Mission Window Review verified at exactly two pages
@@ -45,14 +48,12 @@
 
 - [x] Pull-request quality workflow configured
 - [x] Pages release workflow configured
-- [x] Corrected source and rendered-browser audit passed in run `29848117604`
-- [x] Corrected five-document PDF audit passed in run `29848117604`
-- [x] Corrected desktop and mobile transfer screenshots inspected
+- [x] Corrected source and rendered-browser audit passed in run `29854417415`
+- [x] Corrected five-document PDF audit passed in run `29854417415`
 - [ ] Corrected source merged to `main`
-- [ ] Exact live audit confirms simplified header and transfer composition
-- [ ] Exact live audit confirms aggregate PDF returns 404
+- [ ] Exact live audit confirms the credential is absent from resume HTML and PDF
 - [ ] Final completion state recorded by a fresh `deployment-status.json`
 
 ## Completion condition
 
-This checklist represents verified source readiness. The campaign is complete only when `deployment-status.json` identifies the corrected publication source and records `live_audit: passed`. A missing, stale, or failed receipt leaves the campaign in release-candidate state.
+This checklist represents verified source readiness for the credential correction. The campaign is complete only when `deployment-status.json` identifies the corrected publication source and records `live_audit: passed`. A missing, stale, or failed receipt leaves the campaign in release-candidate state.

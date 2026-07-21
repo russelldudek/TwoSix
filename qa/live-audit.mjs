@@ -139,7 +139,9 @@ await reduced.close();
 const resume = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 await resume.goto(`${base}resume.html?source=${sourceCommit}`, { waitUntil: 'networkidle' });
 assert.equal(await resume.locator('.doc-actions a[href="cover-letter.html"]').count(), 1, 'Live resume must link to cover letter');
-assert.match(await resume.locator('body').innerText(), /https:\/\/russelldudek\.github\.io\/TwoSix\//);
+const resumeText = await resume.locator('body').innerText();
+assert.match(resumeText, /https:\/\/russelldudek\.github\.io\/TwoSix\//);
+assert.doesNotMatch(resumeText, /Food Safety Management Certification/i, 'Live resume must not contain the removed certification');
 await resume.close();
 
 const cover = await browser.newPage({ viewport: { width: 1280, height: 800 } });
