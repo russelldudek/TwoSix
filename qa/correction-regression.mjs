@@ -10,15 +10,32 @@ const index = read('index.html');
 const app = read('app.js');
 const siteCss = read('site-2026.css');
 const entryPlan = read('120-day-plan.html');
+const buildPdfs = read('scripts/build-pdfs.mjs');
+const pdfAudit = read('qa/pdf-audit.mjs');
+const liveAudit = read('qa/live-audit.mjs');
+const manifest = read('artifact-manifest.md');
 const header = index.match(/<header class="site-header">[\s\S]*?<\/header>/)?.[0] ?? '';
 const campaignUrl = 'https://russelldudek.github.io/TwoSix/';
+const aggregatePdfName = 'Russell-Dudek-Two-Six-Candidate-Campaign.pdf';
 const internalName = ['role', 'forge'].join('');
 const retiredTerm = ['man', 'date'].join('');
 
 assert.equal((header.match(/href="resume\.html"/g) ?? []).length, 1, 'Header must expose one Resume destination');
 assert.match(header, /class="nav-cta" href="resume\.html">Resume<\/a>/, 'Header CTA must read Resume');
 assert.doesNotMatch(header, /View my resume/i, 'Superseded CTA label must not return');
+assert.doesNotMatch(header, /href="cover-letter\.html"/i, 'Cover letter must not appear in primary navigation');
 assert.match(header, /class="nav-toggle"[\s\S]*aria-controls="primary-links"/, 'Responsive navigation toggle must be present');
+
+assert.match(index, /class="transfer-grid"/, 'Transfer section must use the redesigned operating-range composition');
+assert.equal((index.match(/class="transfer-lane"/g) ?? []).length, 4, 'Transfer section must contain four distinct operating lanes');
+assert.match(index, /Lead at the altitude the decision requires\./, 'Transfer section must use the approved concise thesis');
+assert.match(index, /Portfolio strategy[\s\S]*Mission work/, 'Transfer section must show the complete operating range');
+assert.equal((index.match(/Day-one contribution/g) ?? []).length, 4, 'Each operating lane must connect evidence to a day-one contribution');
+
+for (const content of [index, buildPdfs, pdfAudit, liveAudit, manifest]) {
+  assert.doesNotMatch(content, new RegExp(aggregatePdfName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), 'Aggregate campaign PDF must be removed from public and release surfaces');
+}
+assert.equal(existsSync(path.join(root, 'docs', aggregatePdfName)), false, 'Aggregate campaign PDF file must be deleted');
 
 const helixStates = app.match(/helix:\s*\{[\s\S]*?states:\s*\[(.*?)\]/)?.[1];
 const sigmaStates = app.match(/sigma:\s*\{[\s\S]*?states:\s*\[(.*?)\]/)?.[1];
