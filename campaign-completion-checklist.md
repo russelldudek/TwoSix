@@ -28,15 +28,21 @@
 - [x] Cover-letter explanation of the linked work
 - [x] Generated resume verified at exactly two pages
 - [x] Generated cover letter verified at exactly one page
-- [x] Other generated documents verified at their exact page counts
-- [x] Full-page rendered document review passed
+- [x] Interview brief verified at exactly four pages
+- [x] Mission Window Review verified at exactly two pages
+- [x] Entry-plan source contains one cover and four substantive phase sheets
+- [ ] Generated entry plan verified at exactly five pages
+- [ ] All four entry-plan content pages pass full-page rendered review
+- [ ] All four entry-plan content pages pass footer-clearance and page-use geometry
 
 ## Publication
 
 - [x] Pull-request quality workflow configured
 - [x] Pages release workflow configured
-- [x] Corrected branch quality run passed
-- [x] Corrected source merged to `main`
-- [x] Exact deployed-file and live-interaction audit required before receipt creation
-- [x] Live routes and downloads covered by the release gate
-- [x] Final campaign audit updated to complete
+- [ ] Five-page correction branch quality run passed
+- [ ] Five-page source merged to `main`
+- [ ] Five-page PDF regenerated and committed
+- [ ] Exact deployed HTML, stylesheet, and PDF verified
+- [ ] Live entry-plan route and download verified
+- [ ] Final campaign audit restored to complete
+- [ ] Private case memory and portfolio learning updated
