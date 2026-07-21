@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
+import { PDFDocument } from 'pdf-lib';
 
 const root = process.cwd();
 const internalName = ['role', 'forge'].join('');
@@ -22,7 +23,12 @@ for (const [filename, expectedPages] of jobs) {
   assert.ok(bytes.byteLength > 10_000, `${filename} must be a substantive PDF`);
 
   const document = await getDocument({ data: new Uint8Array(bytes), disableWorker: true }).promise;
-  if (expectedPages !== null) assert.equal(document.numPages, expectedPages, `${filename} page count`);
+  const independent = await PDFDocument.load(bytes, { updateMetadata: false });
+  assert.equal(independent.getPageCount(), document.numPages, `${filename} PDF parsers must agree on page count`);
+  if (expectedPages !== null) {
+    assert.equal(document.numPages, expectedPages, `${filename} PDF.js page count`);
+    assert.equal(independent.getPageCount(), expectedPages, `${filename} pdf-lib page count`);
+  }
 
   const pageText = [];
   for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
@@ -48,4 +54,4 @@ for (const [filename, expectedPages] of jobs) {
   await document.destroy();
 }
 
-console.log('Two Six generated PDF audit passed');
+console.log('Two Six generated PDF audit passed with independent page-count agreement');
