@@ -34,6 +34,7 @@ const textFiles = [
   'app.js',
   'styles.css',
   'site-2026.css',
+  'entry-plan-2026.css',
   'brand-tokens.css',
   'resume.html',
   'cover-letter.html',
@@ -119,6 +120,25 @@ await cover.goto(`${base}cover-letter.html?source=${sourceCommit}`, { waitUntil:
 assert.equal(await cover.locator('.doc-actions a[href="resume.html"]').count(), 1, 'Live cover letter must link to resume');
 assert.match(await cover.locator('.letter-body').innerText(), /https:\/\/russelldudek\.github\.io\/TwoSix\//);
 await cover.close();
+
+const entryPlan = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+const entryPlanErrors = [];
+entryPlan.on('pageerror', (error) => entryPlanErrors.push(error.message));
+entryPlan.on('console', (message) => {
+  if (message.type() === 'error') entryPlanErrors.push(message.text());
+});
+await entryPlan.goto(`${base}120-day-plan.html?source=${sourceCommit}`, { waitUntil: 'networkidle' });
+assert.equal(await entryPlan.locator('section.sheet').count(), 5, 'Live entry plan must contain five composed sheets');
+assert.equal(await entryPlan.locator('section.sheet.brief.plan-sheet').count(), 4, 'Live entry plan must contain four phase sheets');
+assert.equal(await entryPlan.locator('.doc-actions a[download][href="docs/Russell-Dudek-Two-Six-120-Day-Entry-Plan.pdf"]').count(), 1, 'Live entry plan must expose its native PDF download');
+assert.match(await entryPlan.locator('body').innerText(), /Days 1-30[\s\S]*Days 31-60[\s\S]*Days 61-90[\s\S]*Days 91-120/);
+assert.match(await entryPlan.locator('body').innerText(), /Next-quarter decisions/i);
+assert.match(await entryPlan.locator('body').innerText(), /https:\/\/russelldudek\.github\.io\/TwoSix\//);
+assert.equal(await entryPlan.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), true, 'Live entry-plan screen route must not overflow');
+const entryPlanStyles = await entryPlan.evaluate(() => [...document.styleSheets].map((sheet) => sheet.href ?? '').filter(Boolean));
+assert.ok(entryPlanStyles.some((href) => href.includes('entry-plan-2026.css')), 'Live entry plan must load the focused composition stylesheet');
+assert.deepEqual(entryPlanErrors, [], 'Live entry plan must not emit browser errors');
+await entryPlan.close();
 
 await browser.close();
 console.log(`Two Six live deployment audit passed for ${sourceCommit}`);
