@@ -9,6 +9,7 @@ const read = (relativePath) => readFileSync(path.join(root, relativePath), 'utf8
 const index = read('index.html');
 const app = read('app.js');
 const siteCss = read('site-2026.css');
+const entryPlan = read('120-day-plan.html');
 const header = index.match(/<header class="site-header">[\s\S]*?<\/header>/)?.[0] ?? '';
 const campaignUrl = 'https://russelldudek.github.io/TwoSix/';
 const internalName = ['role', 'forge'].join('');
@@ -34,6 +35,26 @@ assert.match(index, /href="#evidence">See the evidence behind the fit<\/a>/);
 assert.match(index, /<section class="section dark" id="evidence">/);
 assert.match(siteCss, /@media\s*\(max-width:\s*980px\)[\s\S]*\.nav-toggle/, 'Responsive menu styling must exist');
 assert.match(siteCss, /@media\s*\(max-width:\s*650px\)[\s\S]*\.sync-gates[\s\S]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/, 'Handheld artifact must use a deliberate 2x2 semantic composition');
+
+assert.equal((entryPlan.match(/<section class="sheet/g) ?? []).length, 5, 'Entry plan must contain one cover and four phase sheets');
+assert.equal((entryPlan.match(/<section class="sheet brief plan-sheet"/g) ?? []).length, 4, 'Entry plan must dedicate one sheet to each 30-day phase');
+for (const range of ['Days 1-30', 'Days 31-60', 'Days 61-90', 'Days 91-120']) {
+  assert.match(entryPlan, new RegExp(range.replace('-', '\\-')), `Entry plan must include ${range}`);
+}
+for (const pageLabel of ['2 / 5', '3 / 5', '4 / 5', '5 / 5']) {
+  assert.match(entryPlan, new RegExp(pageLabel.replace('/', '\\/')), `Entry plan must include page label ${pageLabel}`);
+}
+for (const requiredDepth of [
+  /decision rights/i,
+  /portfolio hypotheses/i,
+  /evidence standards/i,
+  /coaching cadence/i,
+  /product economics/i,
+  /next-quarter decisions/i
+]) {
+  assert.match(entryPlan, requiredDepth, `Entry plan must retain substantive operating depth: ${requiredDepth}`);
+}
+assert.match(entryPlan, /entry-plan-2026\.css/, 'Entry plan must load its focused composition stylesheet');
 
 const documents = [
   'resume.html',
