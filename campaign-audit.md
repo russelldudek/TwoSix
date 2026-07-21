@@ -42,4 +42,5 @@ Campaign state: complete.
 - Cover-letter pagination: passed at exactly one page.
 - Interview brief, entry plan, and Mission Window Review pagination: passed at exactly four, three, and two pages.
 - Candidate-facing confidentiality: source and generated-document scans passed with zero prohibited matches.
-- Exact live deployment: the release workflow compares deployed source, scripts, styles, logo, and PDFs byte-for-byte, then exercises the live desktop, mobile, reduced-motion, scenario, and reciprocal-document flows before it writes the deployment receipt.
+- Exact live diagnostic: passed in workflow run 29806337680, including deployed-file equality, desktop interaction, 390-pixel mobile navigation and artifact composition, reduced motion, and reciprocal resume/cover-letter navigation.
+- Final release contract: the Pages workflow must pass the same exact live audit before it writes `deployment-status.json` with `live_audit: passed`.
