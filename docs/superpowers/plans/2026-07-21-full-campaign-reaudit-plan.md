@@ -4,7 +4,7 @@
 
 **Goal:** Correct the navigation defect, align every public artifact with the current campaign contracts, and publish the verified campaign to `main`.
 
-**Architecture:** Retain the static HTML/CSS/JavaScript campaign and add a focused responsive layer, atomic interaction controller, source regression, rendered Playwright audit, and generated-PDF audit. GitHub Actions is the release boundary.
+**Architecture:** Retain the static HTML/CSS/JavaScript campaign and add a focused responsive layer, atomic interaction controller, source regression, rendered Playwright audit, generated-PDF audit, and exact live-deployment audit. GitHub Actions is the release boundary.
 
 **Tech Stack:** HTML, CSS, JavaScript, Node.js, Playwright, PDF.js, GitHub Actions, GitHub Pages.
 
@@ -44,8 +44,8 @@
 
 ### Task 4: Validate and publish
 
-- [ ] Run the pull-request quality workflow.
-- [ ] Repair every failed source, browser, print, or PDF assertion.
-- [ ] Merge the verified branch to `main`.
-- [ ] Verify the Pages deployment receipt and corrected live experience.
-- [ ] Update the final campaign audit and portfolio learning record.
+- [x] Run the pull-request quality workflow.
+- [x] Repair every failed source, browser, print, or PDF assertion.
+- [x] Merge the verified branch to `main`.
+- [x] Verify the Pages deployment receipt and corrected live experience.
+- [x] Update the final campaign audit and portfolio learning record.

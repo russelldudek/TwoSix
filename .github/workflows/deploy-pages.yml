@@ -62,15 +62,29 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Run exact live deployment audit
+        id: live-audit
+        continue-on-error: true
+        run: |
+          node qa/live-audit.mjs "${{ steps.deployment.outputs.page_url }}" "$GITHUB_SHA" 2>&1 | tee live-audit.log
+      - name: Upload live audit diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-audit
+          path: live-audit.log
+      - name: Stop on live audit failure
+        if: steps.live-audit.outcome == 'failure'
+        run: exit 1
       - name: Persist generated documents and deployment receipt
         if: success()
         run: |
-          printf '{"source_commit":"%s","page_url":"%s","deployed_at":"%s"}\n' \
+          printf '{"source_commit":"%s","page_url":"%s","deployed_at":"%s","live_audit":"passed"}\n' \
             "$GITHUB_SHA" \
             "${{ steps.deployment.outputs.page_url }}" \
             "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > deployment-status.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs deployment-status.json
-          git commit -m "Persist generated campaign PDFs and deployment receipt [skip ci]"
+          git commit -m "Persist verified campaign PDFs and deployment receipt [skip ci]"
           git push origin HEAD:main

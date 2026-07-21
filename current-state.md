@@ -1,3 +1,3 @@
 # Current State
 
-The campaign remains in `building` until the corrected branch passes quality, merges to `main`, and the public deployment receipt identifies that corrected source commit.
+The corrected campaign is complete. Source, rendered browser, responsive, reduced-motion, interaction, print, and generated-PDF gates passed before merge. The release workflow requires an exact live deployment audit before it writes the final deployment receipt.
