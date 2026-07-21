@@ -38,6 +38,10 @@ for (const [filename, expectedPages] of jobs) {
   assert.doesNotMatch(text, new RegExp(internalName, 'i'), `${filename} must not expose internal process attribution`);
   assert.doesNotMatch(text, new RegExp(`\\b${retiredTerm}\\b`, 'i'), `${filename} must use current actual-work terminology`);
 
+  if (filename.includes('Technologies-Resume')) {
+    assert.doesNotMatch(text, /Food Safety Management Certification/i, `${filename} must not contain the removed certification`);
+  }
+
   if (filename.includes('120-Day-Entry-Plan')) {
     for (const phrase of ['Days 1-30', 'Days 31-60', 'Days 61-90', 'Days 91-120', 'Next-quarter decisions']) {
       assert.match(text, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'), `${filename} must include ${phrase}`);
