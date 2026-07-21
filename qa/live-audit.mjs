@@ -34,6 +34,7 @@ const textFiles = [
   'app.js',
   'styles.css',
   'site-2026.css',
+  'transfer-2026.css',
   'entry-plan-2026.css',
   'brand-tokens.css',
   'resume.html',
@@ -50,8 +51,7 @@ const binaryFiles = [
   'docs/Russell-Dudek-Two-Six-Technologies-Cover-Letter.pdf',
   'docs/Russell-Dudek-Two-Six-Interview-Thesis-Brief.pdf',
   'docs/Russell-Dudek-Two-Six-120-Day-Entry-Plan.pdf',
-  'docs/Russell-Dudek-Two-Six-Mission-Window-Review.pdf',
-  'docs/Russell-Dudek-Two-Six-Candidate-Campaign.pdf'
+  'docs/Russell-Dudek-Two-Six-Mission-Window-Review.pdf'
 ];
 
 for (const relativePath of [...textFiles, ...binaryFiles]) {
@@ -61,6 +61,12 @@ for (const relativePath of [...textFiles, ...binaryFiles]) {
   ]);
   assert.equal(live.equals(local), true, `${relativePath} must match the deployed source byte-for-byte`);
 }
+
+const removedAggregate = await fetch(new URL(`docs/Russell-Dudek-Two-Six-Candidate-Campaign.pdf?source=${sourceCommit}`, base), {
+  cache: 'no-store',
+  headers: { 'cache-control': 'no-cache' }
+});
+assert.equal(removedAggregate.status, 404, 'Removed aggregate campaign PDF must not remain deployed');
 
 const browser = await chromium.launch({ headless: true });
 const errors = [];
@@ -73,8 +79,22 @@ desktop.on('console', (message) => {
 await desktop.goto(`${base}index.html?source=${sourceCommit}`, { waitUntil: 'networkidle' });
 assert.equal(await desktop.locator('.site-header a[href="resume.html"]').count(), 1, 'Live header must contain one Resume destination');
 assert.equal((await desktop.locator('.site-header a[href="resume.html"]').innerText()).trim(), 'Resume', 'Live header action must read Resume');
+assert.equal(await desktop.locator('.site-header a[href="cover-letter.html"]').count(), 0, 'Live primary navigation must not contain Cover letter');
+assert.equal(await desktop.locator('.transfer-lane').count(), 4, 'Live transfer section must contain four operating lanes');
+assert.equal(await desktop.locator('.transfer-value span').allInnerTexts().then((items) => items.filter((item) => item.trim() === 'Day-one contribution').length), 4, 'Live transfer section must connect every lane to a day-one contribution');
+assert.equal(await desktop.locator('a[href="docs/Russell-Dudek-Two-Six-Candidate-Campaign.pdf"]').count(), 0, 'Live site must not expose an aggregate campaign PDF action');
+const desktopStyles = await desktop.evaluate(() => [...document.styleSheets].map((sheet) => sheet.href ?? '').filter(Boolean));
+assert.ok(desktopStyles.some((href) => href.includes('transfer-2026.css')), 'Live site must load the transfer composition stylesheet');
 assert.equal(await desktop.locator('.site-header').getAttribute('data-source-commit'), null, 'Source-control metadata must not appear in the live header');
 assert.equal(await desktop.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), true, 'Live desktop must not overflow');
+
+const desktopTransfer = await desktop.evaluate(() => {
+  const intro = document.querySelector('.transfer-intro').getBoundingClientRect();
+  const lanes = document.querySelector('.transfer-lanes').getBoundingClientRect();
+  return { introRight: intro.right, lanesLeft: lanes.left, topDelta: Math.abs(intro.top - lanes.top) };
+});
+assert.ok(desktopTransfer.introRight < desktopTransfer.lanesLeft, 'Live desktop transfer section must retain two distinct columns');
+assert.ok(desktopTransfer.topDelta <= 4, 'Live desktop transfer columns must align');
 
 await desktop.locator('[data-scenario="sigma"]').click();
 assert.equal((await desktop.locator('#decision-name').innerText()).trim(), 'PRODUCTIZE');
@@ -97,9 +117,16 @@ assert.equal(await toggle.isVisible(), true, 'Live mobile navigation toggle must
 await toggle.click();
 assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
 assert.equal(await mobile.locator('.site-header a[href="resume.html"]').isVisible(), true, 'Live mobile Resume destination must be visible when menu opens');
+assert.equal(await mobile.locator('.site-header a[href="cover-letter.html"]').count(), 0, 'Live mobile navigation must not contain Cover letter');
 assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), true, 'Live mobile must not overflow');
 const mobileColumns = await mobile.locator('.gate').evaluateAll((nodes) => new Set(nodes.map((node) => Math.round(node.getBoundingClientRect().x))).size);
 assert.equal(mobileColumns, 2, 'Live 390-pixel artifact must use the two-column semantic composition');
+const mobileTransfer = await mobile.evaluate(() => {
+  const intro = document.querySelector('.transfer-intro').getBoundingClientRect();
+  const lanes = document.querySelector('.transfer-lanes').getBoundingClientRect();
+  return { introBottom: intro.bottom, lanesTop: lanes.top };
+});
+assert.ok(mobileTransfer.introBottom < mobileTransfer.lanesTop, 'Live mobile transfer lanes must follow the introduction');
 await mobile.close();
 
 const reduced = await browser.newPage({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
