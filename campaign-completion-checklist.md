@@ -7,6 +7,8 @@
 - [x] Brand provenance and typography decision
 - [x] Candidate-independent qualifier
 - [x] One unique header Resume destination
+- [x] Cover letter removed from primary navigation
+- [x] Cover letter retained through reciprocal document navigation and the application set
 - [x] Current actual-work terminology
 - [x] Cross-artifact evidence map
 
@@ -19,6 +21,9 @@
 - [x] Reduced-motion semantic result
 - [x] Responsive navigation disclosure
 - [x] 390-pixel and 320-pixel artifact compositions
+- [x] Transfer section contains four evidence-to-contribution lanes
+- [x] Transfer section uses deliberate desktop and handheld compositions
+- [x] Transfer pane visual review passed for the corrected desktop and mobile source
 
 ## Documents
 
@@ -34,17 +39,20 @@
 - [x] Entry plan verified at exactly five generated pages
 - [x] Entry-plan phase pages passed full-page rendered geometry
 - [x] Entry-plan phase pages passed footer-clearance and page-use thresholds
+- [x] Aggregate campaign PDF removed from source, generation, audit, manifest, and repository
 
 ## Publication
 
 - [x] Pull-request quality workflow configured
 - [x] Pages release workflow configured
-- [x] Five-page correction quality runs passed
-- [x] Five-page source merged to `main`
-- [x] Generated entry-plan PDF persisted on `main`
-- [x] Exact live audit includes entry-plan HTML, focused stylesheet, PDF, route, phase structure, and native download
-- [x] Final completion state is governed by `deployment-status.json`, not by this checklist alone
+- [x] Corrected source and rendered-browser audit passed in run `29848117604`
+- [x] Corrected five-document PDF audit passed in run `29848117604`
+- [x] Corrected desktop and mobile transfer screenshots inspected
+- [ ] Corrected source merged to `main`
+- [ ] Exact live audit confirms simplified header and transfer composition
+- [ ] Exact live audit confirms aggregate PDF returns 404
+- [ ] Final completion state recorded by a fresh `deployment-status.json`
 
 ## Completion condition
 
-This checklist represents source readiness. The campaign is complete only when `deployment-status.json` identifies the final publication source and records `live_audit: passed`. A missing, stale, or failed receipt returns the campaign to building without changing these source-readiness checks.
+This checklist represents verified source readiness. The campaign is complete only when `deployment-status.json` identifies the corrected publication source and records `live_audit: passed`. A missing, stale, or failed receipt leaves the campaign in release-candidate state.

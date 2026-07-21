@@ -12,8 +12,7 @@ const jobs = [
   ['cover-letter.html', 'Russell-Dudek-Two-Six-Technologies-Cover-Letter.pdf'],
   ['interview-brief.html', 'Russell-Dudek-Two-Six-Interview-Thesis-Brief.pdf'],
   ['120-day-plan.html', 'Russell-Dudek-Two-Six-120-Day-Entry-Plan.pdf'],
-  ['mission-window-review.html', 'Russell-Dudek-Two-Six-Mission-Window-Review.pdf'],
-  ['index.html', 'Russell-Dudek-Two-Six-Candidate-Campaign.pdf']
+  ['mission-window-review.html', 'Russell-Dudek-Two-Six-Mission-Window-Review.pdf']
 ];
 
 const browser = await chromium.launch({ headless: true });
