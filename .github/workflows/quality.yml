@@ -1,0 +1,32 @@
+name: Two Six campaign quality
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run source regression audit
+        run: node qa/correction-regression.mjs
+      - name: Install audit and document dependencies
+        run: |
+          npm install --no-save playwright@1.55.0 pdfjs-dist@4.10.38
+          npx playwright install --with-deps chromium
+      - name: Run rendered browser audit
+        run: node qa/browser-audit.mjs
+      - name: Generate printable PDFs
+        run: node scripts/build-pdfs.mjs
+      - name: Run generated PDF audit
+        run: node qa/pdf-audit.mjs
