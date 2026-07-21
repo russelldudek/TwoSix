@@ -45,6 +45,13 @@ jobs:
         with:
           name: browser-audit
           path: browser-audit.log
+      - name: Upload transfer pane visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transfer-pane-review
+          path: qa-artifacts/transfer-*.png
+          if-no-files-found: warn
       - name: Stop on rendered browser failure
         if: steps.browser-audit.outcome == 'failure'
         run: exit 1
