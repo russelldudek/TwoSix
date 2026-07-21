@@ -33,7 +33,7 @@ jobs:
         run: exit 1
       - name: Install audit and document dependencies
         run: |
-          npm install --no-save playwright@1.55.0 pdfjs-dist@4.10.38
+          npm install --no-save playwright@1.55.0 pdfjs-dist@4.10.38 pdf-lib@1.17.1
           npx playwright install --with-deps chromium
       - name: Run rendered browser audit
         id: browser-audit
@@ -50,6 +50,11 @@ jobs:
         run: exit 1
       - name: Generate printable PDFs
         run: node scripts/build-pdfs.mjs
+      - name: Upload entry plan for visual review
+        uses: actions/upload-artifact@v4
+        with:
+          name: five-page-entry-plan
+          path: docs/Russell-Dudek-Two-Six-120-Day-Entry-Plan.pdf
       - name: Run generated PDF audit
         id: pdf-audit
         continue-on-error: true

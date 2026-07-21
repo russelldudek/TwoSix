@@ -26,23 +26,25 @@
 - [x] Native PDF download controls
 - [x] Complete live candidate-vision URL in every document
 - [x] Cover-letter explanation of the linked work
-- [x] Generated resume verified at exactly two pages
-- [x] Generated cover letter verified at exactly one page
+- [x] Resume verified at exactly two pages
+- [x] Cover letter verified at exactly one page
 - [x] Interview brief verified at exactly four pages
 - [x] Mission Window Review verified at exactly two pages
-- [x] Entry-plan source contains one cover and four substantive phase sheets
-- [x] Generated entry plan verified at exactly five pages on the correction branch
-- [x] All four entry-plan content pages passed full-page rendered browser geometry
-- [x] All four entry-plan content pages passed footer-clearance and page-use thresholds
+- [x] Entry plan contains one cover and four substantive phase sheets
+- [x] Entry plan verified at exactly five generated pages
+- [x] Entry-plan phase pages passed full-page rendered geometry
+- [x] Entry-plan phase pages passed footer-clearance and page-use thresholds
 
 ## Publication
 
 - [x] Pull-request quality workflow configured
 - [x] Pages release workflow configured
-- [x] Five-page correction branch quality run `29837523440` passed
-- [ ] Five-page source merged to `main`
-- [ ] Five-page PDF regenerated and committed on `main`
-- [ ] Exact deployed HTML, stylesheet, and PDF verified
-- [ ] Live entry-plan route and download verified
-- [ ] Final campaign audit restored to complete
-- [ ] Private case memory and portfolio learning updated
+- [x] Five-page correction quality runs passed
+- [x] Five-page source merged to `main`
+- [x] Generated entry-plan PDF persisted on `main`
+- [x] Exact live audit includes entry-plan HTML, focused stylesheet, PDF, route, phase structure, and native download
+- [x] Final completion state is governed by `deployment-status.json`, not by this checklist alone
+
+## Completion condition
+
+This checklist represents source readiness. The campaign is complete only when `deployment-status.json` identifies the final publication source and records `live_audit: passed`. A missing, stale, or failed receipt returns the campaign to building without changing these source-readiness checks.

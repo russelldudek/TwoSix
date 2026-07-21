@@ -95,9 +95,7 @@ async function auditRoute(route, viewport) {
 
     await sigma.click();
     await page.waitForTimeout(120);
-    if (viewport.width > 0) {
-      assert.ok(await page.locator('.sync-board').evaluate((node) => node.classList.contains('is-running')), `Scenario motion must enter an observable intermediate state at ${viewport.name}`);
-    }
+    assert.ok(await page.locator('.sync-board').evaluate((node) => node.classList.contains('is-running')), `Scenario motion must enter an observable intermediate state at ${viewport.name}`);
     assert.equal((await page.locator('#decision-name').innerText()).trim(), 'PRODUCTIZE');
     assert.deepEqual(await page.locator('.gate-state').allInnerTexts(), ['Field evidence', 'Aligned', 'Repeatability proof', 'Aligned']);
     await page.waitForTimeout(1250);
@@ -139,12 +137,15 @@ async function auditRoute(route, viewport) {
       const footer = sheet.querySelector('.page-footer');
       if (!footer || getComputedStyle(footer).position !== 'absolute') return 0;
       const footerTop = footer.getBoundingClientRect().top;
-      const contentBottom = [...sheet.children]
-        .filter((child) => child !== footer)
-        .reduce((max, child) => Math.max(max, child.getBoundingClientRect().bottom), -Infinity);
+      const visibleDescendants = [...sheet.querySelectorAll('*')].filter((node) => {
+        if (node === footer || footer.contains(node) || node.closest('.screen-only')) return false;
+        const style = getComputedStyle(node);
+        return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) !== 0;
+      });
+      const contentBottom = visibleDescendants.reduce((max, node) => Math.max(max, node.getBoundingClientRect().bottom), sheet.getBoundingClientRect().top);
       return Math.max(0, Math.ceil(contentBottom - footerTop));
     }));
-    assert.ok(overlaps.every((amount) => amount <= 1), `${route} content must not collide with absolute footers at ${viewport.name}: ${overlaps}`);
+    assert.ok(overlaps.every((amount) => amount <= 1), `${route} nested content must not collide with absolute footers at ${viewport.name}: ${overlaps}`);
   }
 
   await page.close();
@@ -170,15 +171,18 @@ for (const route of routes.filter((route) => route !== 'index.html')) {
     const footer = sheet.querySelector('.page-footer');
     if (!footer) return { gap: 0, overlap: 0 };
     const footerTop = footer.getBoundingClientRect().top;
-    const contentBottom = [...sheet.children]
-      .filter((child) => child !== footer)
-      .reduce((max, child) => Math.max(max, child.getBoundingClientRect().bottom), -Infinity);
+    const visibleDescendants = [...sheet.querySelectorAll('*')].filter((node) => {
+      if (node === footer || footer.contains(node) || node.closest('.screen-only')) return false;
+      const style = getComputedStyle(node);
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) !== 0;
+    });
+    const contentBottom = visibleDescendants.reduce((max, node) => Math.max(max, node.getBoundingClientRect().bottom), sheet.getBoundingClientRect().top);
     return {
       gap: Math.max(0, Math.round(footerTop - contentBottom)),
       overlap: Math.max(0, Math.round(contentBottom - footerTop))
     };
   }));
-  assert.ok(pageUse.every(({ overlap }) => overlap <= 1), `${route} print content must not overlap its footer: ${JSON.stringify(pageUse)}`);
+  assert.ok(pageUse.every(({ overlap }) => overlap <= 1), `${route} print descendants must not overlap the footer: ${JSON.stringify(pageUse)}`);
   assert.ok(pageUse.every(({ gap }) => gap <= 264), `${route} ordinary print pages must not leave more than roughly 25% unused height: ${JSON.stringify(pageUse)}`);
   await page.close();
 }
