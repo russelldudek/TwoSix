@@ -2,7 +2,7 @@
 
 Audit date: 2026-07-21
 
-Campaign state: building pending five-page entry-plan verification and corrected live deployment.
+Campaign state: quality-passed pending five-page entry-plan merge and exact live deployment.
 
 ## User-directed correction record
 
@@ -26,6 +26,14 @@ Campaign state: building pending five-page entry-plan verification and corrected
 - Regression assertions: the HTML must contain exactly five sheets and four phase sheets; the PDF must contain exactly five pages; all four day ranges and page labels `2 / 5` through `5 / 5` must appear; and required depth topics must remain present.
 - Prior proof invalidated: the previous three-page entry-plan PDF, page-use evidence, exact-live receipt, and portfolio record are stale for the entry-plan surface until the five-page source and live PDF are reverified.
 
+## Five-page entry-plan quality evidence
+
+- Pull-request quality run `29837523440` passed.
+- Source regression passed, including five sheets, four phase sheets, four day ranges, page labels `2 / 5` through `5 / 5`, substantive operating-depth topics, the complete candidate-vision URL, and zero prohibited terminology matches.
+- Rendered browser audit passed at 1440, 1280, 768, 390, and 320 pixels with no horizontal overflow, no footer collision, and no ordinary print page exceeding the page-use threshold.
+- Generated PDF audit passed with exact pagination `2 / 1 / 4 / 5 / 2`, complete candidate-vision URLs, current terminology, and clean metadata boundaries.
+- The five-page plan remains future-facing and labels performance targets as baselines to establish rather than invented internal measures.
+
 ## Full re-audit corrections retained
 
 - Replaced retired authority-command terminology with `actual work` language.
@@ -38,15 +46,10 @@ Campaign state: building pending five-page entry-plan verification and corrected
 - Re-composed the handheld decision model into a deliberate two-by-two semantic layout at 390 pixels and a one-column layout at 320 pixels.
 - Preserved a labeled Helix starting state without reintroducing the overlapping reset control.
 
-## Current release gates
+## Remaining release gates
 
-- Manifest: source-complete on the correction branch.
-- Brand fidelity: unchanged; must remain passed after release.
-- UX psychology: unchanged; must remain passed after release.
-- Responsive composition: full viewport matrix required because the entry-plan screen route changed.
-- Screen-document behavior: must pass without horizontal overflow or fixed-sheet clipping.
-- Print page use and footer geometry: all four ordinary phase pages must pass.
-- Entry-plan pagination: must pass at exactly five pages.
-- Resume, cover-letter, interview-brief, and Mission Window Review pagination: must remain 2 / 1 / 4 / 2.
-- Candidate-facing confidentiality: source and generated-document scans must return zero prohibited matches.
-- Exact live deployment: deployed HTML, focused stylesheet, and five-page PDF must match the corrected source before the campaign returns to complete.
+- Merge the quality-passed correction branch to `main`.
+- Regenerate and commit the five-page entry-plan PDF through the release workflow.
+- Verify the deployed entry-plan HTML, focused stylesheet, and PDF against the corrected source.
+- Exercise the live entry-plan route and native download.
+- Restore the campaign state to complete and update private portfolio learning.
