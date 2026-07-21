@@ -13,6 +13,7 @@
 
 - `styles.css`
 - `site-2026.css`
+- `transfer-2026.css` - focused evidence-to-contribution operating-range composition
 - `entry-plan-2026.css` - focused five-page entry-plan composition
 - `brand-tokens.css`
 - `app.js`
@@ -32,7 +33,6 @@
 - `docs/Russell-Dudek-Two-Six-Interview-Thesis-Brief.pdf` - four pages
 - `docs/Russell-Dudek-Two-Six-120-Day-Entry-Plan.pdf` - five pages after corrected release
 - `docs/Russell-Dudek-Two-Six-Mission-Window-Review.pdf` - two pages
-- `docs/Russell-Dudek-Two-Six-Candidate-Campaign.pdf`
 
 ## Quality and publication
 
