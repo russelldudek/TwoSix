@@ -38,6 +38,7 @@
 
 - `qa/correction-regression.mjs`
 - `qa/browser-audit.mjs`
+- `qa/capture-transfer.mjs`
 - `qa/pdf-audit.mjs`
 - `qa/live-audit.mjs`
 - `.github/workflows/quality.yml`
