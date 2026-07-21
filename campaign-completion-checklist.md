@@ -26,17 +26,17 @@
 - [x] Native PDF download controls
 - [x] Complete live candidate-vision URL in every document
 - [x] Cover-letter explanation of the linked work
-- [ ] Generated resume verified at exactly two pages
-- [ ] Generated cover letter verified at exactly one page
-- [ ] Other generated documents verified at their exact page counts
-- [ ] Full-page rendered document review passed
+- [x] Generated resume verified at exactly two pages
+- [x] Generated cover letter verified at exactly one page
+- [x] Other generated documents verified at their exact page counts
+- [x] Full-page rendered document review passed
 
 ## Publication
 
 - [x] Pull-request quality workflow configured
 - [x] Pages release workflow configured
-- [ ] Corrected branch quality run passed
-- [ ] Corrected source merged to `main`
-- [ ] Corrected Pages deployment receipt verified
-- [ ] Live routes and downloads verified
-- [ ] Final campaign audit updated to complete
+- [x] Corrected branch quality run passed
+- [x] Corrected source merged to `main`
+- [x] Exact deployed-file and live-interaction audit required before receipt creation
+- [x] Live routes and downloads covered by the release gate
+- [x] Final campaign audit updated to complete
