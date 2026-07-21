@@ -45,12 +45,18 @@ jobs:
         with:
           name: browser-audit
           path: browser-audit.log
+      - name: Verify transfer pane screenshots
+        if: steps.browser-audit.outcome == 'success'
+        run: |
+          test -s qa-artifacts/transfer-desktop.png
+          test -s qa-artifacts/transfer-mobile.png
+          ls -lh qa-artifacts
       - name: Upload transfer pane visual review
-        if: always()
+        if: steps.browser-audit.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: transfer-pane-review
-          path: qa-artifacts
+          path: ${{ github.workspace }}/qa-artifacts
           if-no-files-found: error
       - name: Stop on rendered browser failure
         if: steps.browser-audit.outcome == 'failure'
