@@ -1,0 +1,422 @@
+/* Focused composition layer for the five-page 120-day entry plan. */
+
+.plan-sheet {
+  padding: .5in .58in .5in;
+  overflow: hidden;
+}
+
+.plan-sheet .doc-head {
+  margin-bottom: .11in;
+}
+
+.plan-sheet .contact-line {
+  margin-bottom: .16in;
+}
+
+.plan-phase-head {
+  display: grid;
+  grid-template-columns: 1.2in minmax(0, 1fr);
+  gap: .22in;
+  align-items: end;
+  padding-bottom: .14in;
+  margin-bottom: .17in;
+  border-bottom: 2px solid #111;
+}
+
+.plan-range {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: .52in;
+  padding: .08in .12in;
+  background: #111616;
+  color: var(--signal-lime);
+  font-size: 9.5pt;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.plan-phase-head h2 {
+  margin: 0 0 .03in;
+  font-size: 22pt;
+  line-height: 1.04;
+  letter-spacing: -.035em;
+}
+
+.plan-phase-head p {
+  margin: 0;
+  color: #596466;
+  font-size: 9.2pt;
+  line-height: 1.45;
+}
+
+.plan-question {
+  display: grid;
+  grid-template-columns: 1.15in 1fr;
+  gap: .16in;
+  align-items: start;
+  margin: 0 0 .17in;
+  padding: .13in .15in;
+  border-left: 4px solid var(--signal-cyan);
+  background: #f1f4f4;
+}
+
+.plan-question strong {
+  font-size: 7.5pt;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #526062;
+}
+
+.plan-question p {
+  margin: 0;
+  font-size: 9.25pt;
+  line-height: 1.48;
+  font-weight: 650;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .16in;
+  margin-bottom: .17in;
+}
+
+.plan-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .12in;
+}
+
+.plan-card {
+  border-top: 2px solid #111;
+  padding: .11in .04in 0;
+  break-inside: avoid;
+}
+
+.plan-card.accent {
+  border-top-color: var(--signal-lime);
+}
+
+.plan-card h3,
+.plan-section h3 {
+  margin: 0 0 .07in;
+  font-size: 11.2pt;
+  line-height: 1.2;
+}
+
+.plan-card p,
+.plan-card li,
+.plan-section p,
+.plan-section li {
+  font-size: 8.7pt;
+  line-height: 1.47;
+}
+
+.plan-card p,
+.plan-section p {
+  margin: 0 0 .08in;
+}
+
+.plan-card ul,
+.plan-section ul {
+  margin: 0;
+  padding-left: .17in;
+}
+
+.plan-card li,
+.plan-section li {
+  margin: 0 0 .055in;
+}
+
+.plan-section {
+  margin-bottom: .17in;
+  break-inside: avoid;
+}
+
+.plan-section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .18in;
+  margin-bottom: .09in;
+  padding-bottom: .055in;
+  border-bottom: 1px solid #b9c2c3;
+}
+
+.plan-section-title h3 {
+  margin: 0;
+}
+
+.plan-section-title span {
+  font-size: 7.2pt;
+  line-height: 1.2;
+  color: #687476;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.plan-contract-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .09in;
+}
+
+.plan-contract-item {
+  min-height: .75in;
+  padding: .09in .1in;
+  background: #111616;
+  color: #fff;
+  break-inside: avoid;
+}
+
+.plan-contract-item strong {
+  display: block;
+  margin-bottom: .035in;
+  color: var(--signal-lime);
+  font-size: 8pt;
+  line-height: 1.2;
+}
+
+.plan-contract-item span {
+  display: block;
+  color: #dce3e4;
+  font-size: 7.7pt;
+  line-height: 1.38;
+}
+
+.plan-hypothesis {
+  display: grid;
+  grid-template-columns: .28in minmax(0, 1fr);
+  gap: .08in;
+  padding: .08in 0;
+  border-top: 1px solid #c8d0d1;
+  break-inside: avoid;
+}
+
+.plan-hypothesis:last-child {
+  border-bottom: 1px solid #c8d0d1;
+}
+
+.plan-hypothesis b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: .25in;
+  height: .25in;
+  background: var(--signal-lime);
+  color: #071000;
+  font-size: 8pt;
+}
+
+.plan-hypothesis p {
+  margin: 0;
+  font-size: 8.6pt;
+  line-height: 1.45;
+}
+
+.plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin: 0;
+  break-inside: avoid;
+}
+
+.plan-table th {
+  padding: .075in .085in;
+  background: #111616;
+  color: #fff;
+  border: 1px solid #111616;
+  font-size: 7.3pt;
+  line-height: 1.25;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+
+.plan-table td {
+  padding: .075in .085in;
+  border: 1px solid #c9d1d2;
+  vertical-align: top;
+  font-size: 7.85pt;
+  line-height: 1.42;
+}
+
+.plan-table td:first-child {
+  font-weight: 750;
+}
+
+.plan-output-table th:first-child,
+.plan-output-table td:first-child {
+  width: 30%;
+}
+
+.plan-rights-table th:first-child,
+.plan-rights-table td:first-child {
+  width: 24%;
+}
+
+.plan-rights-table th:nth-child(2),
+.plan-rights-table td:nth-child(2) {
+  width: 31%;
+}
+
+.plan-review-card {
+  min-height: 1.3in;
+  padding: .11in;
+  background: #edf1f1;
+  border: 1px solid #cbd3d4;
+  break-inside: avoid;
+}
+
+.plan-review-card .label {
+  display: block;
+  margin-bottom: .06in;
+  color: #5c686a;
+  font-size: 7pt;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+.plan-review-card h3 {
+  margin: 0 0 .06in;
+  font-size: 10.5pt;
+  line-height: 1.18;
+}
+
+.plan-review-card p {
+  margin: 0;
+  font-size: 8.15pt;
+  line-height: 1.42;
+}
+
+.plan-cadence {
+  display: grid;
+  grid-template-columns: 1.1in minmax(0, 1fr) 1.55in;
+  gap: .11in;
+  padding: .075in 0;
+  border-top: 1px solid #c5cecf;
+  align-items: start;
+  break-inside: avoid;
+}
+
+.plan-cadence:last-child {
+  border-bottom: 1px solid #c5cecf;
+}
+
+.plan-cadence strong {
+  font-size: 8.2pt;
+}
+
+.plan-cadence p,
+.plan-cadence span {
+  margin: 0;
+  font-size: 7.9pt;
+  line-height: 1.4;
+}
+
+.plan-cadence span {
+  color: #5f6b6d;
+  font-weight: 700;
+}
+
+.plan-checkpoint {
+  margin-top: .14in;
+  padding: .12in .14in;
+  background: #111616;
+  color: #fff;
+  border-left: 5px solid var(--signal-lime);
+  break-inside: avoid;
+}
+
+.plan-checkpoint strong {
+  display: block;
+  margin-bottom: .045in;
+  color: var(--signal-lime);
+  font-size: 8.3pt;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+.plan-checkpoint p,
+.plan-checkpoint li {
+  font-size: 8.2pt;
+  line-height: 1.43;
+}
+
+.plan-checkpoint p {
+  margin: 0;
+}
+
+.plan-checkpoint ul {
+  margin: 0;
+  padding-left: .18in;
+}
+
+.plan-note {
+  margin: .11in 0 0;
+  color: #5d696b;
+  font-size: 7.6pt;
+  line-height: 1.4;
+}
+
+.plan-sheet .page-footer {
+  left: .58in;
+  right: .58in;
+  bottom: .31in;
+}
+
+@media screen and (max-width: 900px) {
+  .plan-sheet {
+    overflow: visible;
+  }
+
+  .plan-phase-head,
+  .plan-question,
+  .plan-grid,
+  .plan-grid.three,
+  .plan-contract-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-cadence {
+    grid-template-columns: 1fr;
+    gap: .25rem;
+  }
+
+  .plan-range {
+    justify-self: start;
+  }
+}
+
+@media print {
+  .plan-sheet {
+    min-height: 11in;
+    height: 11in;
+    margin: 0;
+    box-shadow: none;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .plan-sheet:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .plan-card,
+  .plan-section,
+  .plan-review-card,
+  .plan-checkpoint,
+  .plan-table,
+  .plan-contract-item,
+  .plan-hypothesis,
+  .plan-cadence {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
