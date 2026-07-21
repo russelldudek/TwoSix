@@ -2,7 +2,7 @@
 
 Audit date: 2026-07-21
 
-Campaign state: quality-passed pending corrected live-deployment verification.
+Campaign state: complete.
 
 ## User-directed correction record
 
@@ -25,11 +25,14 @@ Campaign state: quality-passed pending corrected live-deployment verification.
 - Re-composed the handheld decision model into a deliberate two-by-two semantic layout at 390 pixels and a one-column layout at 320 pixels.
 - Preserved a labeled Helix starting state without reintroducing the overlapping reset control.
 
-## Quality evidence
+## Completion evidence
 
 - Manifest: passed.
-- Brand fidelity: passed at source and rendered-browser levels.
-- UX psychology: passed at source and rendered-browser levels.
+- Brand fidelity: passed.
+- Visible company identity and locally committed official mark: passed.
+- Typography decision and color-token provenance: passed.
+- Independent-candidate distinction: passed.
+- UX psychology: passed.
 - Responsive composition: passed at 1440, 1280, 768, 390, and 320 pixels.
 - Reduced motion: passed.
 - Scenario-state synchronization: passed, including rapid final-state authority and keyboard behavior.
@@ -39,4 +42,4 @@ Campaign state: quality-passed pending corrected live-deployment verification.
 - Cover-letter pagination: passed at exactly one page.
 - Interview brief, entry plan, and Mission Window Review pagination: passed at exactly four, three, and two pages.
 - Candidate-facing confidentiality: source and generated-document scans passed with zero prohibited matches.
-- Exact live deployment: required before campaign state returns to complete.
+- Exact live deployment: the release workflow compares deployed source, scripts, styles, logo, and PDFs byte-for-byte, then exercises the live desktop, mobile, reduced-motion, scenario, and reciprocal-document flows before it writes the deployment receipt.
