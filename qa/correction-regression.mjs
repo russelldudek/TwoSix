@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -51,17 +51,28 @@ for (const file of documents) {
 assert.match(read('cover-letter.html'), /https:\/\/russelldudek\.github\.io\/TwoSix\//, 'Cover letter body must print the complete campaign URL');
 assert.ok(existsSync(path.join(root, 'brand-intelligence.md')), 'Brand intelligence record must exist');
 assert.ok(existsSync(path.join(root, 'campaign-audit.md')), 'Current campaign audit must exist');
+assert.ok(existsSync(path.join(root, 'artifact-manifest.md')), 'Artifact manifest must exist');
 
-const publicTextFiles = [
-  'index.html', 'resume.html', 'cover-letter.html', 'interview-brief.html',
-  '120-day-plan.html', 'mission-window-review.html', 'app.js', 'styles.css',
-  'site-2026.css', 'brand-tokens.css', 'brand-intelligence.md', 'README.md',
-  'campaign-audit.md'
-];
+const textExtensions = new Set(['.html', '.css', '.js', '.mjs', '.ts', '.svg', '.json', '.jsonld', '.md', '.txt', '.xml', '.yml', '.yaml']);
+const ignoredDirectories = new Set(['.git', 'node_modules', '_site']);
+const publicTextFiles = [];
+
+function collect(directory) {
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (entry.isDirectory() && ignoredDirectories.has(entry.name)) continue;
+    const absolute = path.join(directory, entry.name);
+    if (entry.isDirectory()) collect(absolute);
+    if (entry.isFile() && textExtensions.has(path.extname(entry.name).toLowerCase())) {
+      publicTextFiles.push(path.relative(root, absolute));
+    }
+  }
+}
+collect(root);
+
 for (const file of publicTextFiles) {
   const content = read(file);
   assert.doesNotMatch(content, new RegExp(internalName, 'i'), `${file} must not expose internal process attribution`);
   assert.doesNotMatch(content, new RegExp(`\\b${retiredTerm}\\b`, 'i'), `${file} must use actual-work terminology`);
 }
 
-console.log('Two Six full campaign correction contract passed');
+console.log(`Two Six full campaign correction contract passed across ${publicTextFiles.length} public text files`);
